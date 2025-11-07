@@ -2,10 +2,45 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
+
+void print_array(std::ostream& os, const std::vector<int>& vec)
+{
+	for (const auto value : vec) {
+		os << value << ' ';
+	}
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	std::ifstream infile("input.txt");
+
+	if (!infile.is_open()) {
+		std::cerr << "Error opening file" << '\n';
+	}
+
+	std::string line;
+	std::vector<int> xVector;
+	std::vector<int> yVector;
+	int xValue, yValue;
+
+	std::getline(infile, line);
+
+	while (std::getline(infile, line)) {
+		std::istringstream iss(line);
+		iss >> xValue >> yValue;
+		xVector.push_back(xValue);
+		yVector.push_back(yValue);
+	}
+
+	print_array(std::cout, xVector);
+	print_array(std::cout, yVector);
+	
+
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
