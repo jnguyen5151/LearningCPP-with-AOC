@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 void print_array(std::ostream& os, const std::vector<int>& vec)
 {
@@ -22,12 +23,10 @@ int main()
 		std::cerr << "Error opening file" << '\n';
 	}
 
-	std::string line;
-	std::vector<int> xVector;
-	std::vector<int> yVector;
+	std::string line{};
+	std::vector<int> xVector{};
+	std::vector<int> yVector{};
 	int xValue, yValue;
-
-	std::getline(infile, line);
 
 	while (std::getline(infile, line)) {
 		std::istringstream iss(line);
@@ -36,9 +35,17 @@ int main()
 		yVector.push_back(yValue);
 	}
 
-	print_array(std::cout, xVector);
-	print_array(std::cout, yVector);
+	std::sort(xVector.begin(), xVector.end());
+	std::sort(yVector.begin(), yVector.end());
+
+	int solution{};
+
+	for (int i = 0; i < xVector.size(); i++)
+	{
+		solution += abs(xVector[i] - yVector[i]);
+	}
 	
+	std::cout << solution;
 
 	return 0;
 }
