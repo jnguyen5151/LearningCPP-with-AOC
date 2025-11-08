@@ -1,5 +1,5 @@
-// LearnCPP.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+// Learning C++ with Advent of Code 2024
+// Im pretty bad at coding, so let me know if theres any improvements I could make :) always happy to learn
 
 #include <iostream>
 #include <fstream>
@@ -10,15 +10,30 @@
 #include <unordered_map>
 #include <utility>
 
-// prints Vectors/Arrays
+// utility functions
 void print_array(std::ostream& os, const std::vector<int>& vec)
 {
 	for (const auto value : vec) {
 		os << value << ' ';
 	}
+	std::cout << '\n';
+	return;
 }
 
-//Takes input file with pair values and parses them into 2 vectors
+std::ifstream openFile(std::string& fileName)
+{
+
+	std::ifstream infile(fileName);
+
+	if (!infile) {
+		std::cerr << "Error opening file" << '\n';
+		exit(EXIT_FAILURE);
+	}
+
+	return infile;
+}
+
+// Takes input file with pair values and parses them into 2 vectors
 std::pair<std::vector<int>, std::vector<int>> getParsedVectors(std::ifstream& infile)
 {
 	std::string line{};
@@ -39,8 +54,8 @@ std::pair<std::vector<int>, std::vector<int>> getParsedVectors(std::ifstream& in
 }
 
 
-//Advent Solution Functions
-int getAdvent1(std::vector<int>& xVector, std::vector<int>& yVector)
+// Advent Day 1 Solution Functions
+int getAdventDay1P1(std::vector<int>& xVector, std::vector<int>& yVector)
 {
 
 	std::sort(xVector.begin(), xVector.end());
@@ -55,38 +70,118 @@ int getAdvent1(std::vector<int>& xVector, std::vector<int>& yVector)
 	return solution;
 }
 
+int getAdventDay1P2(std::vector<int>& xVector, std::vector<int>& yVector)
+{
+	std::unordered_map<int, int> yMap;
 
+	for (std::size_t i = 0; i < yVector.size(); i++)
+	{
+		int vectorValue{ yVector[i] };
+		if (yMap.count(vectorValue)) {
+			yMap[vectorValue]++;
+		}
+		else {
+			yMap[vectorValue] = 1;
+		}
+	}
+
+	int solution{};
+	for (std::size_t j = 0; j < xVector.size(); j++)
+	{
+		int searching{ xVector[j] };
+		if (yMap.count(searching))
+		{
+			solution += (yMap[searching] * searching);
+		}
+	}
+
+	return solution;
+
+}
+
+// Advent Day 2 Solution Functions
+bool checkSafety(std::vector<int>& safetyNumbers)
+{
+	if (safetyNumbers[1] > safetyNumbers[0])
+	{
+		for (std::size_t i = 1; i < safetyNumbers.size(); i++)
+		{
+			int diff{ safetyNumbers[i] - safetyNumbers[i-1] };
+			if (diff > 3 || diff <= 0)
+			{
+				return false;
+			}
+		}
+		return true;
+
+	}
+	else {
+		for (std::size_t i = 1; i < safetyNumbers.size(); i++)
+		{
+			int diff{ safetyNumbers[i-1] - safetyNumbers[i] };
+			if (diff > 3 || diff <= 0)
+			{
+				return false;
+			}
+		}
+		return true;
+
+	}
+}
+
+int getAdventDay2P1(std::ifstream& infile)
+{
+	std::string line{};
+	std::vector<int> safetyNumbers{};
+	int value{};
+	int solution{ 0 };
+
+	while (std::getline(infile, line))
+	{
+		std::istringstream iss(line);
+		while (iss >> value)
+		{
+			safetyNumbers.push_back(value);
+		}
+
+		if (checkSafety(safetyNumbers))
+		{
+			solution++;
+		}
+
+		safetyNumbers.clear();
+
+	}
+	return solution;
+}
 
 int main()
 {
+	// day 1
+	std::string day1File{ "input.txt" };
+	std::ifstream infile{ openFile(day1File)};
 
-	constexpr auto inputFileName = "input.txt";
-
-	std::ifstream infile(inputFileName);
-
-	if (!infile) {
-		std::cerr << "Error opening file" << '\n';
-		return EXIT_FAILURE;
-	}
-
-	std::pair<std::vector<int>, std::vector<int>> parsedPair { getParsedVectors(infile) };
+	std::pair<std::vector<int>, std::vector<int>> parsedPair{ getParsedVectors(infile) };
 	std::vector<int> xVector{ parsedPair.first };
 	std::vector<int> yVector{ parsedPair.second };
 
-	int solution{ getAdvent1(xVector, yVector) };
+	int solution1{ getAdventDay1P1(xVector, yVector) };
 
-	std::cout << "Solution " << solution << '\n';
+	std::cout << "Solution1: " << solution1 << '\n';
+
+	int solution2{ getAdventDay1P2(xVector, yVector) };
+
+	std::cout << "Solution2: " << solution2 << '\n';
+
+	infile.close();
+
+	// day 2
+	std::string day2File{ "input2.txt" };
+	std::ifstream infile2{ openFile(day2File) };
+
+	int solution3{ getAdventDay2P1(infile2) };
+
+	std::cout << "Solution3: " << solution3 << '\n';
 
 	return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
