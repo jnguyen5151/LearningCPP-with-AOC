@@ -7,7 +7,10 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include <unordered_map>
+#include <utility>
 
+// prints Vectors/Arrays
 void print_array(std::ostream& os, const std::vector<int>& vec)
 {
 	for (const auto value : vec) {
@@ -15,18 +18,14 @@ void print_array(std::ostream& os, const std::vector<int>& vec)
 	}
 }
 
-int main()
+//Takes input file with pair values and parses them into 2 vectors
+std::pair<std::vector<int>, std::vector<int>> getParsedVectors(std::ifstream& infile)
 {
-	std::ifstream infile("input.txt");
-
-	if (!infile.is_open()) {
-		std::cerr << "Error opening file" << '\n';
-	}
-
 	std::string line{};
 	std::vector<int> xVector{};
 	std::vector<int> yVector{};
-	int xValue, yValue;
+	int xValue{};
+	int yValue{};
 
 	while (std::getline(infile, line)) {
 		std::istringstream iss(line);
@@ -35,17 +34,48 @@ int main()
 		yVector.push_back(yValue);
 	}
 
+	return std::make_pair(xVector, yVector);
+
+}
+
+
+//Advent Solution Functions
+int getAdvent1(std::vector<int>& xVector, std::vector<int>& yVector)
+{
+
 	std::sort(xVector.begin(), xVector.end());
 	std::sort(yVector.begin(), yVector.end());
 
 	int solution{};
-
-	for (int i = 0; i < xVector.size(); i++)
+	for (std::size_t i = 0; i < xVector.size(); i++)
 	{
 		solution += abs(xVector[i] - yVector[i]);
 	}
-	
-	std::cout << solution;
+
+	return solution;
+}
+
+
+
+int main()
+{
+
+	constexpr auto inputFileName = "input.txt";
+
+	std::ifstream infile(inputFileName);
+
+	if (!infile) {
+		std::cerr << "Error opening file" << '\n';
+		return EXIT_FAILURE;
+	}
+
+	std::pair<std::vector<int>, std::vector<int>> parsedPair { getParsedVectors(infile) };
+	std::vector<int> xVector{ parsedPair.first };
+	std::vector<int> yVector{ parsedPair.second };
+
+	int solution{ getAdvent1(xVector, yVector) };
+
+	std::cout << "Solution " << solution << '\n';
 
 	return 0;
 }
