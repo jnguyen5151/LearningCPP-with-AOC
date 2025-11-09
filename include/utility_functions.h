@@ -14,7 +14,6 @@
 
 namespace utils {
 
-	void print_array(std::ostream& os, const std::vector<int>& vec);
 	std::ifstream openFile(const std::string& fileName);
 
 }
