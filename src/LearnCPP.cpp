@@ -33,5 +33,14 @@ int main()
 
 	std::cout << "Solution3: " << solution3 << '\n';
 
+	infile2.clear();
+	infile2.seekg(0, std::ios::beg);
+
+	int solution4{ aoc::getAdventDay2P2(infile2) };
+
+	std::cout << "Solution4: " << solution4 << '\n';
+
+	infile2.close();
+
 	return 0;
 }
