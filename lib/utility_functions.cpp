@@ -1,6 +1,6 @@
 #include "utility_functions.h"
 
-// utility functions
+// utility functions for main src
 
 // file opener
 std::ifstream utils::openFile(const std::string& fileName)

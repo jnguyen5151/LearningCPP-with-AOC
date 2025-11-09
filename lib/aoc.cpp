@@ -36,7 +36,7 @@ std::pair<std::vector<int>, std::vector<int>> aoc::getParsedVectors(std::ifstrea
 
 
 // Advent Day 1 Solution Functions
-int aoc::getAdventDay1P1(std::vector<int>& xVector, std::vector<int>& yVector)
+int aoc::getDistance(std::vector<int>& xVector, std::vector<int>& yVector)
 {
 
 	std::sort(xVector.begin(), xVector.end());
@@ -51,7 +51,7 @@ int aoc::getAdventDay1P1(std::vector<int>& xVector, std::vector<int>& yVector)
 	return solution;
 }
 
-int aoc::getAdventDay1P2(std::vector<int>& xVector, std::vector<int>& yVector)
+int aoc::getSimilarity(std::vector<int>& xVector, std::vector<int>& yVector)
 {
 	std::unordered_map<int, int> yMap;
 
@@ -90,7 +90,6 @@ bool aoc::checkSafety(std::vector<int>& safetyNumbers)
 			int diff{ safetyNumbers[i] - safetyNumbers[i - 1] };
 			if (diff > 3 || diff <= 0)
 			{
-				std::cout << "asc rejected " << safetyNumbers[i] << "  " << safetyNumbers[i - 1] << '\n';
 				return false;
 			}
 		}
@@ -103,7 +102,6 @@ bool aoc::checkSafety(std::vector<int>& safetyNumbers)
 			int diff{ safetyNumbers[i - 1] - safetyNumbers[i] };
 			if (diff > 3 || diff <= 0)
 			{
-				std::cout << "dec rejected " << safetyNumbers[i] << "  " << safetyNumbers[i - 1] << '\n';
 				return false;
 			}
 		}
@@ -123,25 +121,19 @@ bool aoc::checkSafetyTolerate(std::vector<int>& safetyNumbers)
 			{
 				std::vector<int> iRemoved{ safetyNumbers };
 				iRemoved.erase(iRemoved.begin() + i);
-				print_array(std::cout, iRemoved);
 				if (checkSafety(iRemoved)) {
-					std::cout << "tolerate approved " << '\n';
 					return true;
 				}
 
 				std::vector<int> iRemoved2{ safetyNumbers };
 				iRemoved2.erase(iRemoved2.begin() + (i - 1));
-				print_array(std::cout, iRemoved2);
 				if (checkSafety(iRemoved2)) {
-					std::cout << "tolerate approved2 " << '\n';
 					return true;
 				}
 
 				std::vector<int> iRemoved0{ safetyNumbers };
 				iRemoved0.erase(iRemoved0.begin());
-				print_array(std::cout, iRemoved0);
 				if (checkSafety(iRemoved0)) {
-					std::cout << "tolerate approved0 " << '\n';
 					return true;
 				}
 
@@ -159,25 +151,19 @@ bool aoc::checkSafetyTolerate(std::vector<int>& safetyNumbers)
 			{
 				std::vector<int> iRemoved{ safetyNumbers };
 				iRemoved.erase(iRemoved.begin() + i);
-				print_array(std::cout, iRemoved);
 				if (checkSafety(iRemoved)) {
-					std::cout << "tolerate approved " << '\n';
 					return true;
 				}
 
 				std::vector<int> iRemoved2{ safetyNumbers };
 				iRemoved2.erase(iRemoved2.begin() + (i - 1));
-				print_array(std::cout, iRemoved2);
 				if (checkSafety(iRemoved2)) {
-					std::cout << "tolerate2 approved " << '\n';
 					return true;
 				}
 
 				std::vector<int> iRemoved0{ safetyNumbers };
 				iRemoved0.erase(iRemoved0.begin());
-				print_array(std::cout, iRemoved0);
 				if (checkSafety(iRemoved0)) {
-					std::cout << "tolerate approved0 " << '\n';
 					return true;
 				}
 
@@ -189,7 +175,7 @@ bool aoc::checkSafetyTolerate(std::vector<int>& safetyNumbers)
 	}
 }
 
-int aoc::getAdventDay2P1(std::ifstream& infile)
+int aoc::getSafetyReport(std::ifstream& infile)
 {
 	std::string line{};
 	std::vector<int> safetyNumbers{};
@@ -215,14 +201,12 @@ int aoc::getAdventDay2P1(std::ifstream& infile)
 	return solution;
 }
 
-int aoc::getAdventDay2P2(std::ifstream& infile)
+int aoc::getSafetyReportTolerate(std::ifstream& infile)
 {
 	std::string line{};
 	std::vector<int> safetyNumbers{};
 	int value{};
 	int solution{ 0 };
-
-	std::cout << "2P2 reached" << '\n';
 
 	while (std::getline(infile, line))
 	{
@@ -245,3 +229,31 @@ int aoc::getAdventDay2P2(std::ifstream& infile)
 
 
 // Advent Day 3 Solution Functions
+
+int aoc::mulScan(std::ifstream& infile)
+{
+	std::ostringstream oss{};
+	oss << infile.rdbuf();
+	std::string fileString{ oss.str() };
+
+	std::regex pattern(R"(mul\s*\(\s*(\d+)\s*,\s*(\d+)\s*\))");
+
+	std::vector<int> products;
+	int mulResult{};
+
+	for (std::sregex_iterator it(fileString.begin(), fileString.end(), pattern), end; it != end; ++it) {
+		// make sure both groups exist
+		if (it->size() >= 3) {
+			std::string first = (*it)[1].str();
+			std::string second = (*it)[2].str();
+			// ensure they’re digits before converting
+			if (!first.empty() && !second.empty()) {
+				int a = std::stoi(first);
+				int b = std::stoi(second);
+				mulResult += (a * b);
+			}
+		}
+	}
+
+	return mulResult;
+}

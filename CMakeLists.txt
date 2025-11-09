@@ -21,3 +21,4 @@ target_link_libraries(LearnCPP PRIVATE aoc_lib)
 
 file(COPY ${CMAKE_SOURCE_DIR}/src/input.txt DESTINATION ${CMAKE_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/src/input2.txt DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_SOURCE_DIR}/src/input3.txt DESTINATION ${CMAKE_BINARY_DIR})
