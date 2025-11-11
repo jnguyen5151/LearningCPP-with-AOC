@@ -229,7 +229,6 @@ int aoc::getSafetyReportTolerate(std::ifstream& infile)
 
 
 // Advent Day 3 Solution Functions
-
 int aoc::mulScan(std::ifstream& infile)
 {
 	std::ostringstream oss{};
