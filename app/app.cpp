@@ -6,7 +6,7 @@ wxIMPLEMENT_APP(App);
 
 bool App::OnInit()
 {
-	MainFrame* mainFrame = new MainFrame("C++ GUI");
+	MainFrame* mainFrame = new MainFrame("Aoc 2024 Solver");
 	mainFrame->SetClientSize(800, 600);
 	mainFrame->Center();
 	mainFrame->Show(true);
