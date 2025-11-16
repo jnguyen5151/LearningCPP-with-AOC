@@ -17,22 +17,19 @@ set(wxWidgets_CONFIGURATION mswud)
 find_package(wxWidgets REQUIRED COMPONENTS core base)
 include(${wxWidgets_USE_FILE})
 
-# Libraries
-add_library(aoc_lib 
-	"lib/aoc.cpp"
-	"lib/utility_functions.cpp"
+set(SOURCES
+    app/MainFrame.cpp
+    app/app.cpp
+    app/OperationFactory.cpp
+    app/aocDay1.cpp
 )
-
-target_include_directories(aoc_lib PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 # Main Executable
-add_executable(LearnCPP 
-    "app/MainFrame.cpp"
-    "app/app.cpp"
-)
+add_executable(LearnCPP ${SOURCES})
 
+target_include_directories(LearnCPP PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_include_directories(LearnCPP PRIVATE ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(LearnCPP PRIVATE aoc_lib ${wxWidgets_LIBRARIES})
+target_link_libraries(LearnCPP PRIVATE ${wxWidgets_LIBRARIES})
 
 # No console
 if (WIN32)

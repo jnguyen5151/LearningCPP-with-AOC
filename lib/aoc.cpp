@@ -15,6 +15,7 @@ void aoc::print_array(std::ostream& os, const std::vector<int>& vec)
 	return;
 }
 
+// Advent Day 1 Solution Functions
 std::pair<std::vector<int>, std::vector<int>> aoc::getParsedVectors(std::ifstream& infile)
 {
 	std::string line{};
@@ -34,8 +35,6 @@ std::pair<std::vector<int>, std::vector<int>> aoc::getParsedVectors(std::ifstrea
 
 }
 
-
-// Advent Day 1 Solution Functions
 int aoc::getDistance(std::vector<int>& xVector, std::vector<int>& yVector)
 {
 
