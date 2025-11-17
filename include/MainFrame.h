@@ -10,7 +10,6 @@ public:
 	MainFrame(const wxString& title);
 private:
 	wxButton* fileButton;
-	wxButton* solveButton;
 	wxTextCtrl* fileText;
 	wxRadioBox* selectPart;
 	wxRadioBox* selectDay;

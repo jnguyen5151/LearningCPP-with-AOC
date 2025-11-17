@@ -22,6 +22,8 @@ set(SOURCES
     app/app.cpp
     app/OperationFactory.cpp
     app/aocDay1.cpp
+    app/aocDay2.cpp
+    app/aocDay3.cpp
 )
 
 # Main Executable

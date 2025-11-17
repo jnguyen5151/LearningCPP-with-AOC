@@ -1,8 +1,8 @@
 #include "MainFrame.h"
-#include "aoc.h"
 #include "utility_functions.h"
 #include "OperationFactory.h"
 
+// Operation creates/calls
 std::pair<int, int> doAction(std::string& mode, std::string& part, std::ifstream& infile)
 {
 	auto op = makeOperation(mode);
@@ -13,6 +13,7 @@ std::pair<int, int> doAction(std::string& mode, std::string& part, std::ifstream
 	}
 	
 	std::pair<int, int> result{};
+
 	if (part == "Part 1")
 	{
 		result.first = op->run(infile, part);
@@ -20,9 +21,28 @@ std::pair<int, int> doAction(std::string& mode, std::string& part, std::ifstream
 		return result;
 	}
 
+	if (part == "Part 2")
+	{
+		result.first = 0;
+		result.second = op->run(infile, part);
+		return result;
+	}
+
+	if (part == "Both")
+	{
+		std::string part1{ "Part 1" };
+		std::string part2{ "Part 2" };
+		result.first = op->run(infile, part1);
+		infile.clear();
+		infile.seekg(0, std::ios::beg);
+		result.second = op->run(infile, part2);
+		return result;
+	}
+
 	return result;
 }
 
+// Main
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
 	
@@ -45,8 +65,6 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 		partChoices);
 	fileButton = new wxButton(panel, wxID_ANY, "Select Input File", wxDefaultPosition, wxDefaultSize, 
                               wxBU_LEFT | wxBU_EXACTFIT);
-	solveButton = new wxButton(panel, wxID_ANY, "Solve", wxDefaultPosition, wxDefaultSize, 
-	                          wxBU_LEFT | wxBU_EXACTFIT);
 	fileText = new wxTextCtrl(panel, wxID_ANY, "Input File Contents", wxDefaultPosition, wxDefaultSize,
                               wxTE_MULTILINE | wxTE_READONLY);
 
@@ -67,6 +85,7 @@ MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 
 }
 
+// wxEvent functions
 void MainFrame:: SubmitFile(wxCommandEvent& evt)
 {
 
@@ -87,19 +106,35 @@ void MainFrame:: SubmitFile(wxCommandEvent& evt)
 		return;
 	}
 
+	std::stringstream buffer;
+	buffer << file.rdbuf();
+	fileText->SetValue(buffer.str());
+	file.clear();
+	file.seekg(0, std::ios::beg);
+
 	std::string selectedDay{ selectDay->GetStringSelection() };
 	std::string selectedPart{ selectPart->GetStringSelection() };
 
 	std::pair<int, int> result{ doAction(selectedDay, selectedPart, file) };
 
-	std::string resultPart1{ std::to_string(result.first) };
-	wxString mystring(resultPart1);
+	std::string resultString{};
 
-	std::stringstream buffer;
-	buffer << file.rdbuf();
+	if (result.first)
+	{
+		resultString += "Part 1: ";
+		resultString += std::to_string(result.first);
+	}
+
+	if (result.second)
+	{
+		resultString += " Part 2: ";
+		resultString += std::to_string(result.second);
+	}
+
+	wxString mystring(resultString);
+
+	wxLogStatus(resultString);
+
 	file.close();
-
-	fileText->SetValue(buffer.str());
-	wxLogStatus(resultPart1);
 
 }
